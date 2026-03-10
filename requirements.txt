@@ -1,0 +1,8 @@
+openai-whisper
+streamlit
+gtts
+sounddevice
+scipy
+scikit-learn
+pandas
+numpy

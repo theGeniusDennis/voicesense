@@ -1,0 +1,24 @@
+# Virtual environment
+nlp-env/
+nlp-venv/
+venv/
+.venv/
+
+# Session logs (generated at runtime)
+evaluation/logs/
+
+# Generated audio files
+tts_output.mp3
+tts_output.wav
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+desktop.ini
