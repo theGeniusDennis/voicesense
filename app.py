@@ -134,7 +134,7 @@ init_state()
 # ── Load resources ────────────────────────────────────────────────────────────
 @st.cache_resource(show_spinner="Loading ASR model...")
 def get_whisper_model():
-    return load_model("base")
+    return load_model("tiny")
 
 @st.cache_data
 def get_questions():
