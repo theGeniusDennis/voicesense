@@ -1,48 +1,37 @@
 """
 tts.py — Text-to-Speech module using gTTS
-Converts text to speech and plays it via winsound (built-in, no external window).
-Uses ffmpeg to convert MP3 to WAV since winsound only supports WAV.
+Returns audio as bytes — playback handled by st.audio() in the browser.
+No server-side audio playback, works on any cloud platform.
 """
 
 from gtts import gTTS
-from pathlib import Path
-import subprocess
-import winsound
-
-_MP3_PATH = Path(__file__).parent / "tts_output.mp3"
-_WAV_PATH = Path(__file__).parent / "tts_output.wav"
+import io
 
 
-def speak(text: str, lang: str = "en", slow: bool = False) -> None:
-    """Convert text to speech and play it silently."""
+def _get_bytes(text: str, lang: str = "en", slow: bool = False) -> bytes:
+    """Generate TTS audio and return as MP3 bytes."""
     tts = gTTS(text=text, lang=lang, slow=slow)
-    tts.save(str(_MP3_PATH))
-
-    # Convert MP3 to WAV using ffmpeg (already installed)
-    subprocess.run(
-        ["ffmpeg", "-y", "-i", str(_MP3_PATH), str(_WAV_PATH)],
-        capture_output=True
-    )
-
-    # Play WAV using built-in winsound — no external window
-    winsound.PlaySound(str(_WAV_PATH), winsound.SND_FILENAME)
+    buf = io.BytesIO()
+    tts.write_to_fp(buf)
+    buf.seek(0)
+    return buf.read()
 
 
-def speak_question(question: str) -> None:
-    speak(f"Question: {question}")
+def get_question_audio(question: str) -> bytes:
+    return _get_bytes(f"Question. {question}")
 
 
-def speak_correct() -> None:
-    speak("That's correct! Well done.")
+def get_correct_audio() -> bytes:
+    return _get_bytes("That's correct! Well done.")
 
 
-def speak_incorrect(correct_answer: str) -> None:
-    speak(f"Not quite. The correct answer is: {correct_answer}")
+def get_incorrect_audio(correct_answer: str) -> bytes:
+    return _get_bytes(f"Not quite. The correct answer is: {correct_answer}")
 
 
-def speak_session_start() -> None:
-    speak("Welcome to VoiceSense. Let's begin your quiz.")
+def get_session_start_audio() -> bytes:
+    return _get_bytes("Welcome to VoiceSense. Let's begin your quiz.")
 
 
-def speak_session_end(score: int, total: int) -> None:
-    speak(f"Quiz complete! You got {score} out of {total} correct. Great effort!")
+def get_session_end_audio(score: int, total: int) -> bytes:
+    return _get_bytes(f"Quiz complete! You got {score} out of {total} correct. Great effort!")

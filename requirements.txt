@@ -1,8 +1,6 @@
 openai-whisper
-streamlit
+streamlit>=1.31.0
 gtts
-sounddevice
-scipy
 scikit-learn
 pandas
 numpy
